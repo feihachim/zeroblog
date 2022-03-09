@@ -4,9 +4,12 @@ namespace App\Entity;
 
 use App\Repository\PostRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass=PostRepository::class)
+ * @Vich\Uploadable
  */
 class Post
 {
@@ -31,6 +34,12 @@ class Post
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $image;
+
+    /**
+     * @Vich\UploadableField(mapping="post_images",fileNameProperty="image")
+     * @var File|null
+     */
+    private $imageFile;
 
     /**
      * @ORM\Column(type="datetime")
@@ -87,6 +96,19 @@ class Post
         $this->image = $image;
 
         return $this;
+    }
+
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    public function setImageFile(?File $imageFile = null): void
+    {
+        $this->imagFile = $imageFile;
+        if (null !== $imageFile) {
+            $this->updatedAt = new \DateTime('now');
+        }
     }
 
     public function getCreatedAt(): ?\DateTimeInterface
