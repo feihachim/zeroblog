@@ -8,8 +8,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 
 class UserCrudController extends AbstractCrudController
 {
@@ -23,18 +21,11 @@ class UserCrudController extends AbstractCrudController
     {
         return [
             IdField::new('id')->onlyOnIndex(),
-            TextField::new('pseudo'),
-            TextField::new('email'),
+            TextField::new('pseudo')->onlyOnIndex(),
+            TextField::new('email')->onlyOnIndex(),
             ImageField::new('image')->setBasePath('images/users')
                 ->setUploadDir('public/images/users')
                 ->setUploadedFileNamePattern('[name]-[randomhash].[extension]'),
-            TextField::new('password')->setFormType(RepeatedType::class)
-                ->setFormTypeOptions([
-                    'type' => PasswordType::class,
-                    'first_options' => ['label' => 'Mot de passe'],
-                    'second_options' => ['label' => 'Confirmez mot de passe']
-                ])
-                ->hideOnIndex(),
             DateTimeField::new('updatedAt')->onlyOnIndex()
         ];
     }
