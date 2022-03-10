@@ -12,7 +12,17 @@ block body %}
   </i>
   <br />
   <p>
-    Categorie: <a href="#">{{ post.category.name }}</a>
+    Catégorie: <a href="#">{{ post.category.name }}</a>
   </p>
 </article>
+<section class="comments">
+  <h2>Commentaires</h2>
+  {% for comment in post.comments %}
+  <div>
+    <p>{{ comment.content | raw }}</p>
+    <i>Ecrit par {{ comment.user.pseudo }} le {{comment.createdAt|date()}}</i>
+  </div>
+  <hr />
+  {% endfor %}
+</section>
 {% endblock %}

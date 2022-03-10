@@ -14,9 +14,13 @@ endblock %} {% block body %}
         alt=""
       />
       {% endif %}
-      <p>{{ post.content  | u.truncate(100)| raw}}</p>
+      <p>{{ post.content  | u.truncate(100,'...')| raw}}</p>
       <i>
-        Ecrit par <a href="#">{{ post.user.pseudo }}</a> le
+        Ecrit par
+        <a href="{{ path('app_post_by_user', { user_id: post.user.id }) }}">
+          {{ post.user.pseudo }}
+        </a>
+        le
         {{ post.createdAt|date() }}
       </i>
       <br />
@@ -29,7 +33,11 @@ endblock %} {% block body %}
     <ul>
       {% for category in categories %}
       <li>
-        <a href="#">
+        <a
+          href="{{
+            path('app_post_by_category', { category_id: category.id })
+          }}"
+        >
           {{ category.name }}
         </a>
       </li>

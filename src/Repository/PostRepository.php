@@ -2,7 +2,9 @@
 
 namespace App\Repository;
 
+use App\Entity\Category;
 use App\Entity\Post;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -43,6 +45,34 @@ class PostRepository extends ServiceEntityRepository
         if ($flush) {
             $this->_em->flush();
         }
+    }
+
+    /**
+     * @param Category $value
+     * @return Post[]
+     */
+    public function findByCategory(Category $value): array
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.category=:val')
+            ->setParameter('val', $value)
+            ->orderBy('p.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @param User $value
+     * @return Post[]
+     */
+    public function findByUser(User $value): array
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.user=:val')
+            ->setParameter('val', $value)
+            ->orderBy('p.id', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
 
     // /**
