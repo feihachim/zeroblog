@@ -20,29 +20,30 @@ class RegistrationFormType extends AbstractType
     {
         $builder
             ->add('email', TextType::class, ['label' => 'Adresse mail'])
+            ->add('pseudo', TextType::class, ['label' => 'Pseudo'])
             ->add('agreeTerms', CheckboxType::class, [
                 'label' => 'Accepter les conditions',
                 'mapped' => false,
                 'constraints' => [
                     new IsTrue([
-                        'message' => 'You should agree to our terms.',
+                        'message' => 'Vous devez accepter les conditions.',
                     ]),
                 ],
             ])
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
-                'invalid_message' => 'The password fields must match.',
+                'invalid_message' => 'Les mots de passe doivent être identiques.',
                 'options' => ['attr' => ['class' => 'password-field']],
                 'required' => true,
                 'first_options' => ['label' => 'Mot de passe'],
                 'second_options' => ['label' => 'Confirmation du mot de passe'],
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter a password',
+                        'message' => 'Entrez un mot de passe',
                     ]),
                     new Length([
                         'min' => 6,
-                        'minMessage' => 'Your password should be at least {{ limit }} characters',
+                        'minMessage' => 'Votre mot de passe doit avoir au minimum {{ limit }} caractères',
                         // max length allowed by Symfony for security reasons
                         'max' => 4096,
                     ]),

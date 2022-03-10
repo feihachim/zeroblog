@@ -11,7 +11,11 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
+/**
+ * @IsGranted("ROLE_ADMIN")
+ */
 class DashboardController extends AbstractDashboardController
 {
     /**
@@ -36,8 +40,10 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Catégories', 'fa fa-tags', Category::class);
         yield MenuItem::linkToCrud('Articles', 'fa fa-file-text', Post::class);
         yield MenuItem::linkToCrud('Commentaires', 'fa fa-comment', Comment::class);
-        yield MenuItem::section('Utilisateurs');
-        yield MenuItem::linkToCrud('Utilisateurs', 'fa fa-user', User::class);
+        if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+            yield MenuItem::section('Utilisateurs');
+            yield MenuItem::linkToCrud('Utilisateurs', 'fa fa-user', User::class);
+        }
         yield MenuItem::section('Retour vers le site');
         yield MenuItem::linkToRoute('Retour vers le site', 'fas fa-door-open', 'app_home');
     }

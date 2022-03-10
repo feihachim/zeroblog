@@ -1,4 +1,40 @@
 {% extends 'base.html.twig' %} {% block title %}Zero blog|Derniers articles{%
 endblock %} {% block body %}
 <h1>Derniers articles</h1>
+<div class="row">
+  <div class="col-sm-8">
+    {% for post in posts %}
+    <article>
+      <h2>{{ post.title }}</h2>
+      {% if post.image %}
+      <img
+        src="{{asset('images/posts/' ~ post.image)}}"
+        width="800px"
+        height="auto"
+        alt=""
+      />
+      {% endif %}
+      <p>{{ post.content  | u.truncate(100)| raw}}</p>
+      <i>
+        Ecrit par <a href="#">{{ post.user.pseudo }}</a> le
+        {{ post.createdAt|date() }}
+      </i>
+      <br />
+      <a href="{{ path('app_post_show', { id: post.id }) }}">Voir plus</a>
+    </article>
+    {% endfor %}
+  </div>
+  <div class="col-sm-4">
+    <h2>Catégories</h2>
+    <ul>
+      {% for category in categories %}
+      <li>
+        <a href="#">
+          {{ category.name }}
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
 {% endblock %}

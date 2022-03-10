@@ -41,9 +41,11 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            {% if is_granted('ROLE_ADMIN') %}
             <li class="nav-item bg-danger">
               <a class="nav-link" href="{{ path('admin') }}">Admin</a>
             </li>
+            {% endif %}
             <li class="nav-item">
               <a class="nav-link" href="{{ path('app_home') }}">Accueil</a>
             </li>
@@ -55,14 +57,18 @@
             </li>
           </ul>
           <ul class="navbar-nav">
+            {% if is_granted('ROLE_USER') %}
             <li class="nav-item bg-success">
               <a class="nav-link" href="{{ path('app_profile') }}">
                 Mon profil
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Déconnexion</a>
+              <a class="nav-link" href="{{ path('app_logout') }}">
+                Déconnexion
+              </a>
             </li>
+            {% else %}
             <li class="nav-item">
               <a class="nav-link" href="{{ path('app_login') }}">Connexion</a>
             </li>
@@ -71,6 +77,7 @@
                 Inscription
               </a>
             </li>
+            {% endif %}
           </ul>
         </div>
       </div>
