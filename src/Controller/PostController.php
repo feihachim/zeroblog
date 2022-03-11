@@ -73,7 +73,6 @@ class PostController extends AbstractController
         if ($this->getUser()) {
             $user = $this->getUser();
             $userComment = $this->commentRepo->findOneByPostAndUser($post, $user);
-            //$editMode = is_bool($userComment);
             $form = $this->createForm(CommentType::class);
             if ($userComment) {
                 $commentId = $userComment->getId();
