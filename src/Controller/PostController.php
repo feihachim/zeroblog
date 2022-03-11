@@ -5,11 +5,15 @@ namespace App\Controller;
 use App\Entity\Category;
 use App\Entity\Post;
 use App\Entity\User;
+use App\Entity\Comment;
+use App\Form\CommentType;
 use App\Repository\CategoryRepository;
+use App\Repository\CommentRepository;
 use App\Repository\PostRepository;
 use App\Repository\UserRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -30,11 +34,17 @@ class PostController extends AbstractController
      */
     private $userRepo;
 
+    /**
+     * @var CommentRepository
+     */
+    private $commentRepo;
+
     public function __construct(ManagerRegistry $doctrine)
     {
         $this->postRepo = $doctrine->getRepository(Post::class);
         $this->categoryRepo = $doctrine->getRepository(Category::class);
         $this->userRepo = $doctrine->getRepository(User::class);
+        $this->commentRepo = $doctrine->getRepository(Comment::class);
     }
 
     /**
@@ -56,12 +66,29 @@ class PostController extends AbstractController
      * @param integer $id
      * @return Response
      */
-    public function show(int $id): Response
+    public function show(int $id, Request $request): Response
     {
+
         $post = $this->postRepo->find($id);
-        return $this->render('post/show.html.twig', [
-            'post' => $post
-        ]);
+        if ($this->getUser()) {
+            $user = $this->getUser();
+            $userComment = $this->commentRepo->findOneByPostAndUser($post, $user);
+            //$editMode = is_bool($userComment);
+            $form = $this->createForm(CommentType::class);
+            if ($userComment) {
+                $commentId = $userComment->getId();
+            } else {
+                $commentId = false;
+            }
+            $options = [
+                'post' => $post,
+                'formComment' => $form->createView(),
+                'commentId' => $commentId
+            ];
+        } else {
+            $options = ['post' => $post];
+        }
+        return $this->render('post/show.html.twig', $options);
     }
 
     /**

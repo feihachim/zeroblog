@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\Comment;
+use App\Entity\Post;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -43,6 +45,16 @@ class CommentRepository extends ServiceEntityRepository
         if ($flush) {
             $this->_em->flush();
         }
+    }
+
+    public function findOneByPostAndUser(Post $post, User $user): ?Comment
+    {
+        return $this->createQueryBuilder('c')
+            ->where('c.post=:value1')
+            ->andWhere('c.user=:value2')
+            ->setParameters(['value1' => $post, 'value2' => $user])
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 
     // /**

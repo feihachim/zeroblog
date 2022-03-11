@@ -17,11 +17,26 @@ block body %}
 </article>
 <section class="comments">
   <h2>Commentaires</h2>
-  {% for comment in post.comments %}
+  {% if is_granted('ROLE_USER') and commentId is defined and commentId == false
+  %}
+  <div>
+    {{ form_start(formComment) }}
+    {{ form_row(formComment.content) }}
+    <button class="btn btn-primary mt-2" type="submit">Publier</button>
+    {{ form_end(formComment) }}
+  </div>
+  {% endif %} {% for comment in post.comments %}
   <div>
     <p>{{ comment.content | raw }}</p>
     <i>Ecrit par {{ comment.user.pseudo }} le {{comment.createdAt|date()}}</i>
   </div>
+  {% if is_granted('ROLE_USER') and commentId is defined and commentId ==
+  comment.id %}
+  {{ form_start(formComment) }}
+  {{ form_row(formComment.content, { value: comment.content }) }}
+  <button class="btn btn-primary mt-2" type="submit">Modifier</button>
+  {{ form_end(formComment) }}
+  {% endif %}
   <hr />
   {% endfor %}
 </section>
