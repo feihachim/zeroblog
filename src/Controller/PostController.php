@@ -114,7 +114,7 @@ class PostController extends AbstractController
     public function listByCategory(int $category_id): Response
     {
         $category = $this->categoryRepo->find($category_id);
-        $posts = $this->postRepo->findByCategory($category);
+        $posts = $this->postRepo->findBy(['category' => $category]);
 
         return $this->render('post/category.html.twig', [
             'posts' => $posts,
@@ -128,7 +128,7 @@ class PostController extends AbstractController
     public function listByUser(int $user_id): Response
     {
         $user = $this->userRepo->find($user_id);
-        $posts = $this->postRepo->findByUser($user);
+        $posts = $this->postRepo->findBy(['user' => $user]);
 
         return $this->render('post/user.html.twig', [
             'posts' => $posts,

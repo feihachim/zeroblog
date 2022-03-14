@@ -31,11 +31,10 @@ class ProfileController extends AbstractController
     public function index(): Response
     {
         $user = $this->getUser();
-        $userPosts = $this->userPostRepo->findByUser($user);
+        $userPosts = $this->userPostRepo->findBy(['user' => $user]);
 
         return $this->render('profile/index.html.twig', [
             'controller_name' => 'ProfileController',
-            // 'user' => $user,
             'userPosts' => $userPosts,
         ]);
     }
