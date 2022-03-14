@@ -12,6 +12,7 @@ use App\Repository\CommentRepository;
 use App\Repository\PostRepository;
 use App\Repository\UserRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,12 +40,18 @@ class PostController extends AbstractController
      */
     private $commentRepo;
 
+    /**
+     * @var ObjectManager
+     */
+    private $entityManager;
+
     public function __construct(ManagerRegistry $doctrine)
     {
         $this->postRepo = $doctrine->getRepository(Post::class);
         $this->categoryRepo = $doctrine->getRepository(Category::class);
         $this->userRepo = $doctrine->getRepository(User::class);
         $this->commentRepo = $doctrine->getRepository(Comment::class);
+        $this->entityManager = $doctrine->getManager();
     }
 
     /**
@@ -72,8 +79,13 @@ class PostController extends AbstractController
         $post = $this->postRepo->find($id);
         if ($this->getUser()) {
             $user = $this->getUser();
-            $userComment = $this->commentRepo->findOneByPostAndUser($post, $user);
-            $form = $this->createForm(CommentType::class);
+            $userComment = $this->commentRepo->findOneBy(['post' => $post, 'user' => $user]);
+            if (!$userComment) {
+                $userComment = new Comment();
+                $userComment->setPost($post);
+                $userComment->setUser($user);
+            }
+            $form = $this->createForm(CommentType::class, $userComment);
             if ($userComment) {
                 $commentId = $userComment->getId();
             } else {
@@ -84,6 +96,13 @@ class PostController extends AbstractController
                 'formComment' => $form->createView(),
                 'commentId' => $commentId
             ];
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $this->entityManager->persist($userComment);
+                $this->entityManager->flush();
+
+                $this->redirectToRoute("app_post_show", ['id' => $id]);
+            }
         } else {
             $options = ['post' => $post];
         }
