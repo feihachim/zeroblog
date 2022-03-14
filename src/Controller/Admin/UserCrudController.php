@@ -16,7 +16,6 @@ class UserCrudController extends AbstractCrudController
         return User::class;
     }
 
-
     public function configureFields(string $pageName): iterable
     {
         return [
@@ -26,7 +25,7 @@ class UserCrudController extends AbstractCrudController
             ImageField::new('image')->setBasePath('images/users')
                 ->setUploadDir('public/images/users')
                 ->setUploadedFileNamePattern('[name]-[randomhash].[extension]'),
-            DateTimeField::new('updatedAt')->onlyOnIndex()
+            DateTimeField::new('updatedAt')->onlyOnIndex(),
         ];
     }
 }

@@ -39,6 +39,7 @@ class Post
 
     /**
      * @Vich\UploadableField(mapping="post_images",fileNameProperty="image")
+     *
      * @var File|null
      */
     private $imageFile;
@@ -125,7 +126,7 @@ class Post
 
     public function setImageFile(?File $imageFile = null): void
     {
-        $this->imagFile = $imageFile;
+        $this->imageFile = $imageFile;
         if (null !== $imageFile) {
             $this->updatedAt = new \DateTime('now');
         }

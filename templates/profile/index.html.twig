@@ -1,4 +1,13 @@
 {% extends 'base.html.twig' %} {% block title %}Zero blog|Mon profil{% endblock
 %} {% block body %}
 <h1>Mon profil</h1>
+<section>
+  <!--  TODO Profile page -->
+  <h2>{{ app.user.pseudo }}</h2>
+  {% if userPosts is defined %} {% for post in userPosts %}
+  <p>{{ post.title }}</p>
+  {% endfor %} {% else %}
+  <p>Aucun article</p>
+  {% endif %}
+</section>
 {% endblock %}

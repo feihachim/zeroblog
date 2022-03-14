@@ -3,9 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Category;
+use App\Entity\Comment;
 use App\Entity\Post;
 use App\Entity\User;
-use App\Entity\Comment;
 use App\Form\CommentType;
 use App\Repository\CategoryRepository;
 use App\Repository\CommentRepository;
@@ -61,21 +61,19 @@ class PostController extends AbstractController
     {
         $posts = $this->postRepo->findAll();
         $categories = $this->categoryRepo->findAll();
+
         return $this->render('post/index.html.twig', [
             'controller_name' => 'PostController',
             'posts' => $posts,
-            'categories' => $categories
+            'categories' => $categories,
         ]);
     }
 
     /**
      * @Route("/post/{id}", name="app_post_show", requirements={"id"="\d+"})
-     * @param integer $id
-     * @return Response
      */
     public function show(int $id, Request $request): Response
     {
-
         $post = $this->postRepo->find($id);
         if ($this->getUser()) {
             $user = $this->getUser();
@@ -94,48 +92,47 @@ class PostController extends AbstractController
             $options = [
                 'post' => $post,
                 'formComment' => $form->createView(),
-                'commentId' => $commentId
+                'commentId' => $commentId,
             ];
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
                 $this->entityManager->persist($userComment);
                 $this->entityManager->flush();
 
-                $this->redirectToRoute("app_post_show", ['id' => $id]);
+                $this->redirectToRoute('app_post_show', ['id' => $id]);
             }
         } else {
             $options = ['post' => $post];
         }
+
         return $this->render('post/show.html.twig', $options);
     }
 
     /**
      * @Route("/post.category/{category_id}",name="app_post_by_category",requirements={"category_id"="\d+"})
-     * @param integer $category_id
-     * @return Response
      */
     public function listByCategory(int $category_id): Response
     {
         $category = $this->categoryRepo->find($category_id);
         $posts = $this->postRepo->findByCategory($category);
+
         return $this->render('post/category.html.twig', [
             'posts' => $posts,
-            'category' => $category
+            'category' => $category,
         ]);
     }
 
     /**
      * @Route("/post.user/{user_id}",name="app_post_by_user",requirements={"user_id"="\d+"})
-     * @param integer $user_id
-     * @return Response
      */
     public function listByUser(int $user_id): Response
     {
         $user = $this->userRepo->find($user_id);
         $posts = $this->postRepo->findByUser($user);
+
         return $this->render('post/user.html.twig', [
             'posts' => $posts,
-            'user' => $user
+            'user' => $user,
         ]);
     }
 }

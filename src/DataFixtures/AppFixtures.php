@@ -9,7 +9,6 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
-
     /**
      * @var UserPasswordHasherInterface
      */
@@ -28,14 +27,13 @@ class AppFixtures extends Fixture
         $user = new User();
         $user->setEmail('abc@xyz.com');
         $user->setPseudo('omega');
-        $plaintextPassword = "test123";
+        $plaintextPassword = 'test123';
 
         $hashedPassword = $this->userPasswordHasher->hashPassword($user, $plaintextPassword);
         $user->setPassword($hashedPassword);
 
-        //$user->setRoles(['ROLE_SUPER_ADMIN']);
+        // $user->setRoles(['ROLE_SUPER_ADMIN']);
         $manager->persist($user);
-
 
         $manager->flush();
     }
