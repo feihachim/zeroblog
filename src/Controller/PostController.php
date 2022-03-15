@@ -78,17 +78,16 @@ class PostController extends AbstractController
         if ($this->getUser()) {
             $user = $this->getUser();
             $userComment = $this->commentRepo->findOneBy(['post' => $post, 'user' => $user]);
-            if (!$userComment) {
+            if ($userComment === null) {
                 $userComment = new Comment();
                 $userComment->setPost($post);
                 $userComment->setUser($user);
+                $commentId = false;
+            } else {
+                $commentId = $userComment->getId();
             }
             $form = $this->createForm(CommentType::class, $userComment);
-            if ($userComment) {
-                $commentId = $userComment->getId();
-            } else {
-                $commentId = false;
-            }
+
             $options = [
                 'post' => $post,
                 'formComment' => $form->createView(),
@@ -119,20 +118,6 @@ class PostController extends AbstractController
         return $this->render('post/category.html.twig', [
             'posts' => $posts,
             'category' => $category,
-        ]);
-    }
-
-    /**
-     * @Route("/post.user/{user_id}",name="app_post_by_user",requirements={"user_id"="\d+"})
-     */
-    public function listByUser(int $user_id): Response
-    {
-        $user = $this->userRepo->find($user_id);
-        $posts = $this->postRepo->findBy(['user' => $user]);
-
-        return $this->render('post/user.html.twig', [
-            'posts' => $posts,
-            'user' => $user,
         ]);
     }
 }

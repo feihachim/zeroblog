@@ -1,13 +1,47 @@
 {% extends 'base.html.twig' %} {% block title %}Zero blog|Mon profil{% endblock
 %} {% block body %}
-<h1>Mon profil</h1>
-<section>
+<h1>Profil de {{ user.pseudo }}</h1>
+<section class="d-flex justify-content-around">
   <!--  TODO Profile page -->
-  <h2>{{ app.user.pseudo }}</h2>
-  {% if userPosts is defined %} {% for post in userPosts %}
-  <p>{{ post.title }}</p>
-  {% endfor %} {% else %}
-  <p>Aucun article</p>
-  {% endif %}
+  <div>
+    {% if user.image is null %}
+    <img
+      src="{{ asset('images/users/blank-profile-picture-g5a966c416_640.png') }}"
+      alt="blank avatar"
+    />
+    {% else %}
+    <img src="{{asset('images/users/' ~ user.image)}}" alt="avatar" />
+    {% endif %}
+  </div>
+  <div>
+    <h2>Pseudo : {{ user.pseudo }}</h2>
+    <h2>Adresse mail : {{ user.email }}</h2>
+    {% if userPosts|length == 0 %}
+    <h2>N'a publié aucun article</h2>
+    {% else %} {% if userPosts|length == 1 %}
+    <h2>A publié 1 article</h2>
+    <h3>Article publié :</h3>
+    {% else %}
+    <h2>A publié {{ userPosts | length }} article(s)</h2>
+    <h3>Articles publiés :</h3>
+    {% endif %}
+    <ul>
+      {% for post in userPosts %}
+      <li>
+        <a href="{{ path('app_post_show', { id: post.id }) }}">
+          {{ post.title }}
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </div>
 </section>
-{% endblock %}
+{% if app.user is defined and app.user.id == app.request.get('id') %}
+<a
+  href="{{ path('app_profile_edit', { id: app.user.id }) }}"
+  class="btn btn-primary mt-3"
+>
+  Modifier mon profil
+</a>
+{% endif %} {% endblock %}

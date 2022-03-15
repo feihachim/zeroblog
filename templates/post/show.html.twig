@@ -7,12 +7,23 @@ block body %}
   {% endif %}
   <p>{{ post.content | raw }}</p>
   <i>
-    Ecrit par <a href="#">{{ post.user.pseudo }}</a> le
+    Ecrit par
+    <a href="{{ path('app_profile_show', { id: post.user.id }) }}">
+      {{ post.user.pseudo }}
+    </a>
+    le
     {{ post.createdAt|date() }}
   </i>
   <br />
   <p>
-    Catégorie: <a href="#">{{ post.category.name }}</a>
+    Catégorie:
+    <a
+      href="{{
+        path('app_post_by_category', { category_id: post.category.id })
+      }}"
+    >
+      {{ post.category.name }}
+    </a>
   </p>
 </article>
 <section class="comments">

@@ -59,7 +59,7 @@
           <ul class="navbar-nav">
             {% if is_granted('ROLE_USER') %}
             <li class="nav-item bg-success">
-              <a class="nav-link" href="{{ path('app_profile') }}">
+              <a class="nav-link" href="{{ path('app_profile_show') }}">
                 {{ app.user.pseudo }}
               </a>
             </li>

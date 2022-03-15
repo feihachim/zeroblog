@@ -17,7 +17,7 @@ endblock %} {% block body %}
       <p>{{ post.content  | u.truncate(100,'...')| raw}}</p>
       <i>
         Ecrit par
-        <a href="{{ path('app_post_by_user', { user_id: post.user.id }) }}">
+        <a href="{{ path('app_profile_show', { id: post.user.id }) }}">
           {{ post.user.pseudo }}
         </a>
         le
