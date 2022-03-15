@@ -38,10 +38,7 @@
   </div>
 </section>
 {% if app.user is defined and app.user.id == app.request.get('id') %}
-<a
-  href="{{ path('app_profile_edit', { id: app.user.id }) }}"
-  class="btn btn-primary mt-3"
->
+<a href="{{ path('app_profile_edit') }}" class="btn btn-primary mt-3">
   Modifier mon profil
 </a>
 {% endif %} {% endblock %}

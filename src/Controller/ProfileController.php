@@ -4,11 +4,13 @@ namespace App\Controller;
 
 use App\Entity\Post;
 use App\Entity\User;
+use App\Form\EditProfileFormType;
 use App\Repository\PostRepository;
 use App\Repository\UserRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -56,12 +58,14 @@ class ProfileController extends AbstractController
     }
 
     /**
-     *@Route("/profile/edit/{id}",name="app_profile_edit",requirements={"id"="\d+"})
-     *
+     * @Route("/profile/edit/",name="app_profile_edit")
+     * @param Request $request
      * @return Response
      */
-    public function edit(): Response
+    public function edit(Request $request): Response
     {
+        $user = $this->getUser();
+        $form = $this->createForm(EditProfileFormType::class, $user);
         return $this->renderForm('profile/edit.html.twig');
     }
 }
