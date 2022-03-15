@@ -1,19 +1,24 @@
 {% extends 'base.html.twig' %} {% block title %}Zero blog|Mon profil{% endblock
 %} {% block body %}
 <h1>Profil de {{ user.pseudo }}</h1>
-<section class="d-flex justify-content-around">
+<section class="d-flex justify-content-between">
   <!--  TODO Profile page -->
-  <div>
+  <div class="w-50">
     {% if user.image is null %}
     <img
+      class="img-fluid"
       src="{{ asset('images/users/blank-profile-picture-g5a966c416_640.png') }}"
       alt="blank avatar"
     />
     {% else %}
-    <img src="{{asset('images/users/' ~ user.image)}}" alt="avatar" />
+    <img
+      class="img-fluid"
+      src="{{asset('images/users/' ~ user.image)}}"
+      alt="avatar"
+    />
     {% endif %}
   </div>
-  <div>
+  <div class="w-50">
     <h2>Pseudo : {{ user.pseudo }}</h2>
     <h2>Adresse mail : {{ user.email }}</h2>
     {% if userPosts|length == 0 %}
@@ -37,7 +42,7 @@
     {% endif %}
   </div>
 </section>
-{% if app.user is defined and app.user.id == app.request.get('id') %}
+{% if is_granted("ROLE_USER") %}
 <a href="{{ path('app_profile_edit') }}" class="btn btn-primary mt-3">
   Modifier mon profil
 </a>

@@ -8,15 +8,13 @@ use App\Form\EditProfileFormType;
 use App\Repository\PostRepository;
 use App\Repository\UserRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @IsGranted("ROLE_USER")
- */
 class ProfileController extends AbstractController
 {
     /**
@@ -29,10 +27,16 @@ class ProfileController extends AbstractController
      */
     private $userRepo;
 
+    /**
+     * @var ObjectManager
+     */
+    private $entityManager;
+
     public function __construct(ManagerRegistry $doctrine)
     {
         $this->userPostRepo = $doctrine->getRepository(Post::class);
         $this->userRepo = $doctrine->getRepository(User::class);
+        $this->entityManager = $doctrine->getManager();
     }
 
     /**
@@ -61,11 +65,22 @@ class ProfileController extends AbstractController
      * @Route("/profile/edit/",name="app_profile_edit")
      * @param Request $request
      * @return Response
+     * @IsGranted("ROLE_USER")
      */
     public function edit(Request $request): Response
     {
         $user = $this->getUser();
         $form = $this->createForm(EditProfileFormType::class, $user);
-        return $this->renderForm('profile/edit.html.twig');
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() and $form->isValid()) {
+            $this->entityManager->persist($user);
+            $this->entityManager->flush();
+
+            $this->redirectToRoute("app_profile_show");
+        }
+        return $this->renderForm('profile/edit.html.twig', [
+            'formProfile' => $form
+        ]);
     }
 }
