@@ -6,10 +6,12 @@ use App\Entity\Post;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class PostCrudController extends AbstractCrudController
 {
@@ -33,9 +35,8 @@ class PostCrudController extends AbstractCrudController
             TextField::new('title'),
             TextEditorField::new('content'),
             AssociationField::new('category'),
-            ImageField::new('image')->setBasePath('images/posts')
-                ->setUploadDir('public/images/posts')
-                ->setUploadedFileNamePattern('[name]-[randomhash].[extension]'),
+            ImageField::new('image')->setBasePath('images/posts')->onlyOnIndex(),
+            Field::new('imageFile')->setFormType(VichImageType::class)->hideOnIndex(),
             DateTimeField::new('createdAt')->onlyOnIndex(),
             DateTimeField::new('updatedAt')->onlyOnIndex(),
         ];

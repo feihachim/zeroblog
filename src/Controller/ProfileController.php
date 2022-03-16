@@ -13,6 +13,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ProfileController extends AbstractController
@@ -67,13 +68,23 @@ class ProfileController extends AbstractController
      * @return Response
      * @IsGranted("ROLE_USER")
      */
-    public function edit(Request $request): Response
+    public function edit(Request $request, UserPasswordHasherInterface $userPasswordHasher): Response
     {
+        /**
+         * @var User $user
+         */
         $user = $this->getUser();
         $form = $this->createForm(EditProfileFormType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() and $form->isValid()) {
+            //Modify password
+            $user->setPassword(
+                $userPasswordHasher->hashPassword(
+                    $user,
+                    $form->get('newPassword')->getData()
+                )
+            );
             $this->entityManager->persist($user);
             $this->entityManager->flush();
 

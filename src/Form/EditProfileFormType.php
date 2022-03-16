@@ -9,6 +9,9 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vich\UploaderBundle\Form\Type\VichImageType;
+use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Length;
 
 class EditProfileFormType extends AbstractType
 {
@@ -20,7 +23,12 @@ class EditProfileFormType extends AbstractType
             ->add('oldPassword', PasswordType::class, [
                 'mapped' => false,
                 'label' => 'Mot de passe actuel',
-                'required' => false
+                'required' => false,
+                'constraints' => [
+                    new UserPassword([
+                        'message' => 'Mauvaise valeur pour le mot de passe actuel'
+                    ])
+                ],
             ])
             ->add('newPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
@@ -29,7 +37,18 @@ class EditProfileFormType extends AbstractType
                 'options' => ['attr' => ['class' => 'password-field']],
                 'first_options' => ['label' => 'Nouveau mot de passe'],
                 'second_options' => ['label' => 'Confirmation du nouveau mot de passe'],
-                'required' => false
+                'required' => false,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Entrez un mot de passe',
+                    ]),
+                    new Length([
+                        'min' => 6,
+                        'minMessage' => 'Votre mot de passe doit avoir au minimum {{ limit }} caractères',
+                        // max length allowed by Symfony for security reasons
+                        'max' => 4096,
+                    ]),
+                ],
             ])
             ->add('imageFile', VichImageType::class, [
                 'label' => 'Image de l\'avatar',
