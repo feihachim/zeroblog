@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Post;
+use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
@@ -20,10 +21,19 @@ class PostCrudController extends AbstractCrudController
         return Post::class;
     }
 
-    public function createEntity(string $entityFqcn)
+    /**
+     *
+     * @param string $entityFqcn
+     * @return Post
+     */
+    public function createEntity(string $entityFqcn): Post
     {
+        /**
+         * @var User $user
+         */
+        $user = $this->getUser();
         $post = new Post();
-        $post->setUser($this->getUser());
+        $post->setUser($user);
 
         return $post;
     }

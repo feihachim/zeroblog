@@ -35,8 +35,8 @@ class ProfileController extends AbstractController
 
     public function __construct(ManagerRegistry $doctrine)
     {
-        $this->userPostRepo = $doctrine->getRepository(Post::class);
-        $this->userRepo = $doctrine->getRepository(User::class);
+        $this->userPostRepo = new PostRepository($doctrine);
+        $this->userRepo = new UserRepository($doctrine);
         $this->entityManager = $doctrine->getManager();
     }
 
@@ -79,10 +79,14 @@ class ProfileController extends AbstractController
 
         if ($form->isSubmitted() and $form->isValid()) {
             //Modify password
+            /**
+             * @var string
+             */
+            $newPassword = $form->get('newPassword')->getData();
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,
-                    $form->get('newPassword')->getData()
+                    $newPassword
                 )
             );
             $this->entityManager->persist($user);

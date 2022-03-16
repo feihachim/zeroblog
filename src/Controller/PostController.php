@@ -10,7 +10,6 @@ use App\Form\CommentType;
 use App\Repository\CategoryRepository;
 use App\Repository\CommentRepository;
 use App\Repository\PostRepository;
-use App\Repository\UserRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -31,11 +30,6 @@ class PostController extends AbstractController
     private $categoryRepo;
 
     /**
-     * @var UserRepository
-     */
-    private $userRepo;
-
-    /**
      * @var CommentRepository
      */
     private $commentRepo;
@@ -47,10 +41,9 @@ class PostController extends AbstractController
 
     public function __construct(ManagerRegistry $doctrine)
     {
-        $this->postRepo = $doctrine->getRepository(Post::class);
-        $this->categoryRepo = $doctrine->getRepository(Category::class);
-        $this->userRepo = $doctrine->getRepository(User::class);
-        $this->commentRepo = $doctrine->getRepository(Comment::class);
+        $this->postRepo = new PostRepository($doctrine);
+        $this->categoryRepo = new CategoryRepository($doctrine);
+        $this->commentRepo = new CommentRepository($doctrine);
         $this->entityManager = $doctrine->getManager();
     }
 
@@ -76,6 +69,9 @@ class PostController extends AbstractController
     {
         $post = $this->postRepo->find($id);
         if ($this->getUser()) {
+            /**
+             * @var User $user
+             */
             $user = $this->getUser();
             $userComment = $this->commentRepo->findOneBy(['post' => $post, 'user' => $user]);
             if ($userComment === null) {

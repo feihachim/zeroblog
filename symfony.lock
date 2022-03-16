@@ -149,6 +149,12 @@
     "phpstan/phpstan": {
         "version": "1.4.10"
     },
+    "phpstan/phpstan-doctrine": {
+        "version": "1.2.11"
+    },
+    "phpstan/phpstan-phpunit": {
+        "version": "1.0.0"
+    },
     "phpstan/phpstan-symfony": {
         "version": "1.1.7"
     },
