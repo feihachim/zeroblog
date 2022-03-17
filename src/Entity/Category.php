@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
-use App\Entity\Post;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -17,24 +16,28 @@ class Category
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     *
      * @var int
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
      * @var string
      */
     private $name;
 
     /**
      * @ORM\Column(type="text")
+     *
      * @var string
      */
     private $description;
 
     /**
      * @ORM\OneToMany(targetEntity=Post::class, mappedBy="category")
+     *
      * @var Collection<int, Post>
      */
     private $posts;

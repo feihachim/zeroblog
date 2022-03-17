@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Post;
 use App\Entity\User;
 use App\Form\EditProfileFormType;
 use App\Repository\PostRepository;
@@ -43,12 +42,11 @@ class ProfileController extends AbstractController
     /**
      * @Route("/profile/{id}",name="app_profile_show", requirements={"id"="\d+"})
      *
-     * @param integer $id
-     * @return Response
+     * @param int $id
      */
     public function show(int $id = null): Response
     {
-        if ($id === null) {
+        if (null === $id) {
             $user = $this->getUser();
         } else {
             $user = $this->userRepo->find($id);
@@ -64,8 +62,6 @@ class ProfileController extends AbstractController
 
     /**
      * @Route("/profile/edit/",name="app_profile_edit")
-     * @param Request $request
-     * @return Response
      * @IsGranted("ROLE_USER")
      */
     public function edit(Request $request, UserPasswordHasherInterface $userPasswordHasher): Response
@@ -78,7 +74,7 @@ class ProfileController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() and $form->isValid()) {
-            //Modify password
+            // Modify password
             /**
              * @var string
              */
@@ -92,10 +88,11 @@ class ProfileController extends AbstractController
             $this->entityManager->persist($user);
             $this->entityManager->flush();
 
-            $this->redirectToRoute("app_profile_show");
+            $this->redirectToRoute('app_profile_show');
         }
+
         return $this->renderForm('profile/edit.html.twig', [
-            'formProfile' => $form
+            'formProfile' => $form,
         ]);
     }
 }

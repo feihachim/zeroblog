@@ -8,10 +8,10 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Vich\UploaderBundle\Form\Type\VichImageType;
 use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
-use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class EditProfileFormType extends AbstractType
 {
@@ -26,8 +26,8 @@ class EditProfileFormType extends AbstractType
                 'required' => false,
                 'constraints' => [
                     new UserPassword([
-                        'message' => 'Mauvaise valeur pour le mot de passe actuel'
-                    ])
+                        'message' => 'Mauvaise valeur pour le mot de passe actuel',
+                    ]),
                 ],
             ])
             ->add('newPassword', RepeatedType::class, [
@@ -52,7 +52,7 @@ class EditProfileFormType extends AbstractType
             ])
             ->add('imageFile', VichImageType::class, [
                 'label' => 'Image de l\'avatar',
-                'required' => false
+                'required' => false,
             ]);
     }
 

@@ -23,18 +23,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     *
      * @var int
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     *
      * @var string
      */
     private $email;
 
     /**
      * @ORM\Column(type="json")
+     *
      * @var string[]
      */
     private $roles = [];
@@ -42,18 +45,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
-     * 
      */
     private $password;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
      * @var string
      */
     private $pseudo;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     *
      * @var string
      */
     private $image;
@@ -67,18 +71,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     *
      * @var \DateTimeInterface
      */
     private $updatedAt;
 
     /**
      * @ORM\OneToMany(targetEntity=Post::class, mappedBy="user")
+     *
      * @var Collection<int, Post>
      */
     private $posts;
 
     /**
      * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="user")
+     *
      * @var Collection<int, Comment>
      */
     private $comments;
@@ -136,11 +143,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return array_unique($roles);
     }
+
     /**
-     * Undocumented function
+     * Undocumented function.
      *
      * @param string[] $roles
-     * @return self
      */
     public function setRoles(array $roles): self
     {

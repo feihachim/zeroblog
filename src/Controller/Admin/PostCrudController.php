@@ -21,11 +21,6 @@ class PostCrudController extends AbstractCrudController
         return Post::class;
     }
 
-    /**
-     *
-     * @param string $entityFqcn
-     * @return Post
-     */
     public function createEntity(string $entityFqcn): Post
     {
         /**

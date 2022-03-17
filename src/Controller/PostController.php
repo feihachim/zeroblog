@@ -74,7 +74,7 @@ class PostController extends AbstractController
              */
             $user = $this->getUser();
             $userComment = $this->commentRepo->findOneBy(['post' => $post, 'user' => $user]);
-            if ($userComment === null) {
+            if (null === $userComment) {
                 $userComment = new Comment();
                 $userComment->setPost($post);
                 $userComment->setUser($user);
