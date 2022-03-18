@@ -47,16 +47,6 @@ class CommentRepository extends ServiceEntityRepository
         }
     }
 
-    public function findOneByPostAndUser(Post $post, User $user): ?Comment
-    {
-        return $this->createQueryBuilder('c')
-            ->where('c.post=:value1')
-            ->andWhere('c.user=:value2')
-            ->setParameters(['value1' => $post, 'value2' => $user])
-            ->getQuery()
-            ->getOneOrNullResult();
-    }
-
     // /**
     //  * @return Comment[] Returns an array of Comment objects
     //  */

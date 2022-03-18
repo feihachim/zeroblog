@@ -8,28 +8,28 @@ use Symfony\Component\HttpFoundation\Response;
 class HomeControllerTest extends WebTestCase
 {
 
-    public function testHomePage()
+    public function testHomePage(): void
     {
         $client = static::createClient();
         $client->request('GET', '/home');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
-    public function testH1HomePage()
+    public function testH1HomePage(): void
     {
         $client = static::createClient();
         $client->request('GET', '/home');
         $this->assertSelectorTextContains('h1', 'Bienvenue sur Zero Blog');
     }
 
-    public function testLoginPage()
+    public function testLoginPage(): void
     {
         $client = static::createClient();
         $client->request('GET', '/login');
         $this->assertSelectorTextContains('h1', 'Connexion');
     }
 
-    public function testAdminPage()
+    public function testAdminPage(): void
     {
         $client = static::createClient();
         $client->request('GET', '/admin');

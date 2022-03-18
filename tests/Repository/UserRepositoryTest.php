@@ -38,7 +38,7 @@ class UserRepositoryTest extends KernelTestCase
         $this->loader = static::getContainer()->get('fidry_alice_data_fixtures.loader.doctrine');
     }
 
-    public function testCount()
+    public function testCount(): void
     {
         //$this->databaseTool->loadFixtures([UserFixtures::class]);
         $this->loader->load([__DIR__ . '/UserRepositoryTestFixtures.yaml']);
